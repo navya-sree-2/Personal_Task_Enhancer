@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_auto_logout.middleware.auto_logout',
 ]
 
 ROOT_URLCONF = 'task_enhancer.urls'
@@ -131,3 +132,7 @@ EMAIL_HOST_PASSWORD ='pjvyfejhkarmncyi'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTO_LOGOUT = {
+    'IDLE_TIME': 60,
+    'MESSAGE': 'The session has expired. Please log in again to continue.',
+}
