@@ -2,11 +2,12 @@
 from django.urls import path 
 from django.contrib.auth import views as auth_views
 from . import views 
- 
+
 urlpatterns = [ 
     path('', views.home, name='home'), 
     path('login/', views.login_view, name='login'), 
     path('signup/', views.signup_view, name='signup'), 
+    path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',views.activate, name='activate'),
     path('logout/', views.logout_view, name='logout'), 
     path('refresh-captcha/', views.refresh_captcha, name='refresh_captcha'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
