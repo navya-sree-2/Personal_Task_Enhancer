@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, SignupForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.sites.shortcuts import get_current_site  
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from .utils import generate_random_string 
 from django.http import JsonResponse 
+from .models import Profile
 # Create your views here.
 def home(request):  
     return render(request, 'registration/home.html')  
@@ -115,4 +116,28 @@ def dashboard_view(request):
 
 @login_required
 def profile_view(request):
-    return render(request, 'profile.html')
+    user = request.user
+    # Ensure profile exists
+    try:
+        profile = user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=user)
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+
+    return render(request, 'profile.html', context)
+
