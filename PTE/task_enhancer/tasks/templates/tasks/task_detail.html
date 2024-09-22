@@ -1,0 +1,16 @@
+{% extends 'dashboard.html' %}
+
+{% block title %}Task Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ task.title }}</h2>
+    <p><strong>Description:</strong> {{ task.description }}</p>
+    <p><strong>Due Date:</strong> {{ task.due_date|date:"Y-m-d" }}</p>
+    <p><strong>Priority:</strong> {{ task.get_priority_display }}</p>
+    <p><strong>Status:</strong> {{ task.get_status_display }}</p>
+    <a href="{% url 'task_update' task.pk %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'task_list' %}" class="btn btn-secondary">Back to List</a>
+</div>
+{% endblock %}

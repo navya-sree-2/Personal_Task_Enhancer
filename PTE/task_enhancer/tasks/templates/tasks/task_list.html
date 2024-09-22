@@ -1,0 +1,40 @@
+{% extends 'dashboard.html' %}
+
+{% block title %}My Tasks{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>My Tasks</h2>
+    <a href="{% url 'task_create' %}" class="btn btn-success mb-3">Add New Task</a>
+    {% if tasks %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.due_date|date:"Y-m-d" }}</td>
+                    <td>{{ task.get_priority_display }}</td>
+                    <td>{{ task.get_status_display }}</td>
+                    <td>
+                        <a href="{% url 'task_detail' task.pk %}" class="btn btn-info btn-sm">View</a>
+                        <a href="{% url 'task_update' task.pk %}" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no tasks.</p>
+    {% endif %}
+</div>
+{% endblock %}

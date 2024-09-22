@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, SignupForm, UserUpdateForm, ProfileUpdateForm
+from .forms import LoginForm, SignupForm, UserUpdateForm, ProfileUpdateForm, TaskForm
 from django.contrib.sites.shortcuts import get_current_site  
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
@@ -14,7 +14,8 @@ from django.http import HttpResponse
 from django.contrib import messages
 from .utils import generate_random_string 
 from django.http import JsonResponse 
-from .models import Profile
+from .models import Profile, Task, Category
+
 # Create your views here.
 def home(request):  
     return render(request, 'registration/home.html')  
@@ -140,4 +141,76 @@ def profile_view(request):
     }
 
     return render(request, 'profile.html', context)
+
+
+
+@login_required
+def task_list(request):
+    category_id = request.GET.get('category', None)
+    if category_id:
+        tasks = Task.objects.filter(user=request.user, category_id=category_id).order_by('due_date')
+    else:
+        tasks = Task.objects.filter(user=request.user).order_by('due_date')
+    
+    categories = Category.objects.all()
+    return render(request, 'tasks/task_list.html', {'tasks': tasks, 'categories': categories})
+
+
+@login_required
+def task_detail(request, pk):
+    task = get_object_or_404(Task, pk=pk, user=request.user)
+    return render(request, 'tasks/task_detail.html', {'task': task})
+
+@login_required
+def task_create(request):
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.user = request.user
+            task.save()
+            messages.success(request, 'Task created successfully!')
+            return redirect('task_list')
+    else:
+        form = TaskForm()
+    return render(request, 'tasks/task_form.html', {'form': form})
+
+@login_required
+def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Task updated successfully!')
+            return redirect('task_list')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'tasks/task_form.html', {'form': form})
+
+@login_required
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk, user=request.user)
+    if request.method == 'POST':
+        task.delete()
+        messages.success(request, 'Task deleted successfully!')
+        return redirect('task_list')
+    return render(request, 'tasks/delete_task.html', {'task': task})
+
+
+def dashboard_view(request):
+    user = request.user
+    total_tasks = Task.objects.filter(user=user).count()
+    pending_tasks = Task.objects.filter(user=user, status='P').count()
+    in_progress_tasks = Task.objects.filter(user=user, status='IP').count()
+    completed_tasks = Task.objects.filter(user=user, status='C').count()
+
+    context = {
+        'total_tasks': total_tasks,
+        'pending_tasks': pending_tasks,
+        'in_progress_tasks': in_progress_tasks,
+        'completed_tasks': completed_tasks,
+    }
+    
+    return render(request, 'dash.html', context)
 

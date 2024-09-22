@@ -1,0 +1,44 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3 class="text-center">Dashboard</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Total Tasks</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_tasks }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Pending Tasks</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ pending_tasks }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">In Progress Tasks</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ in_progress_tasks }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Completed Tasks</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ completed_tasks }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'task_list' %}" class="btn btn-secondary">View Tasks</a>
+    </div>
+</div>
+{% endblock %}

@@ -18,7 +18,14 @@ urlpatterns = [
     path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name='registration/pass_reset_done.html'), name='password_reset_done'),
     path('password_reset_confirm/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='registration/pass_reset_confirm.html'), name='password_reset_confirm'),
     path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(template_name='registration/pass_reset_complete.html'), name='password_reset_complete'),
-    # path('profile/<username>', views.profile, name='profile'),
+    # path('profile/<username>', views.profile_view, name='profile'),
+    path('tasks/', views.task_list, name='task_list'),
+    path('tasks/new/', views.task_create, name='task_create'),
+    path('tasks/<int:pk>/', views.task_detail, name='task_detail'),
+    path('tasks/<int:pk>/edit/', views.task_update, name='task_update'),
+    path('tasks/<int:pk>/delete/', views.task_delete, name='task_delete'),
+
+
 ]
 
 if settings.DEBUG:

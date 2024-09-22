@@ -15,17 +15,31 @@ class Profile(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name  # This will return the name of the category
+
+
 class Task(models.Model):
     PRIORITY_CHOICES = [
-        ('Low', 'Low'),
-        ('Medium', 'Medium'),
-        ('High', 'High'),
+        ('L', 'Low'),
+        ('M', 'Medium'),
+        ('H', 'High'),
     ]
+
+    STATUS_CHOICES = [
+        ('P', 'Pending'),
+        ('IP', 'In Progress'),
+        ('C', 'Completed'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    description = models.TextField()
-    due_date = models.DateTimeField()
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    status = models.CharField(max_length=20, default='To Do')
+    description = models.TextField(blank=True)
+    due_date = models.DateField(null=True, blank=True)
+    priority = models.CharField(max_length=1, choices=PRIORITY_CHOICES, default='M')
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='P')
+    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
