@@ -5,7 +5,29 @@
 {% block content %}
 <div class="container mt-5">
     <h2>My Tasks</h2>
+    
+    <!-- Filter Form -->
+    <form method="GET" class="form-inline mb-3">
+        <select name="priority" class="form-control mr-2">
+            <option value="">All Priorities</option>
+            <option value="H" {% if request.GET.priority == 'H' %}selected{% endif %}>High</option>
+            <option value="M" {% if request.GET.priority == 'M' %}selected{% endif %}>Medium</option>
+            <option value="L" {% if request.GET.priority == 'L' %}selected{% endif %}>Low</option>
+        </select>
+        
+        <select name="status" class="form-control mr-2">
+            <option value="">All Status</option>
+            <option value="P" {% if request.GET.status == 'P' %}selected{% endif %}>Pending</option>
+            <option value="IP" {% if request.GET.status == 'IP' %}selected{% endif %}>In Progress</option>
+            <option value="C" {% if request.GET.status == 'C' %}selected{% endif %}>Completed</option>
+        </select>
+        
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="{% url 'task_list' %}" class="btn btn-secondary ml-2">Clear</a>
+    </form>
+
     <a href="{% url 'task_create' %}" class="btn btn-success mb-3">Add New Task</a>
+    
     {% if tasks %}
         <table class="table table-striped">
             <thead>

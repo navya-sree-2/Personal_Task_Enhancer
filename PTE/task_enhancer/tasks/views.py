@@ -148,23 +148,36 @@ def profile_view(request):
 @login_required
 def task_list(request):
     category_id = request.GET.get('category', None)
+    priority = request.GET.get('priority', None)
+    status = request.GET.get('status', None)
+
+    tasks = Task.objects.filter(user=request.user).order_by('due_date')
+
     if category_id:
-        tasks = Task.objects.filter(user=request.user, category_id=category_id).order_by('due_date')
-    else:
-        tasks = Task.objects.filter(user=request.user).order_by('due_date')
-    paginator = Paginator(tasks, 5)  # Change '5' to the number of tasks you want per page
+        tasks = tasks.filter(category_id=category_id)
+    if priority:
+        tasks = tasks.filter(priority=priority)
+    if status:
+        tasks = tasks.filter(status=status)
+
+    # Pagination: 5 tasks per page
+    paginator = Paginator(tasks, 5)
     page = request.GET.get('page', 1)
+    
     try:
         tasks = paginator.page(page)
     except PageNotAnInteger:
         tasks = paginator.page(1)
     except EmptyPage:
         tasks = paginator.page(paginator.num_pages)
+
     categories = Category.objects.all()
+
     return render(request, 'tasks/task_list.html', {
         'tasks': tasks,
-        'categories': categories
+        'categories': categories,
     })
+
 
 
 @login_required
