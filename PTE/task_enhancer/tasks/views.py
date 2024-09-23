@@ -15,6 +15,7 @@ from django.contrib import messages
 from .utils import generate_random_string 
 from django.http import JsonResponse 
 from .models import Profile, Task, Category
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # Create your views here.
 def home(request):  
@@ -151,9 +152,19 @@ def task_list(request):
         tasks = Task.objects.filter(user=request.user, category_id=category_id).order_by('due_date')
     else:
         tasks = Task.objects.filter(user=request.user).order_by('due_date')
-    
+    paginator = Paginator(tasks, 5)  # Change '5' to the number of tasks you want per page
+    page = request.GET.get('page', 1)
+    try:
+        tasks = paginator.page(page)
+    except PageNotAnInteger:
+        tasks = paginator.page(1)
+    except EmptyPage:
+        tasks = paginator.page(paginator.num_pages)
     categories = Category.objects.all()
-    return render(request, 'tasks/task_list.html', {'tasks': tasks, 'categories': categories})
+    return render(request, 'tasks/task_list.html', {
+        'tasks': tasks,
+        'categories': categories
+    })
 
 
 @login_required
