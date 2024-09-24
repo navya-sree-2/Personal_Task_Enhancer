@@ -8,16 +8,11 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="text-center">Welcome to MySite!</h3>
+                    <h3 class="text-center">Welcome to Personal Task Enhancer!</h3>
                 </div>
                 <div class="card-body text-center">
-                    <p class="lead">Explore our platform and take assessments to improve your skills!</p>
-                    
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'assessments' %}" class="btn btn-primary btn-lg">Take Assessments</a>
-                    {% else %}
-                        <p class="mt-3">Please <a href="{% url 'login' %}">login</a> to take assessments.</p>
-                    {% endif %}
+                    <p class="lead">Explore our platform and improve your time management skills!</p>
+                    <p class="mt-3">Please <a href="{% url 'login' %}">login</a> to manage your tasks.</p>
                 </div>
             </div>
         </div>

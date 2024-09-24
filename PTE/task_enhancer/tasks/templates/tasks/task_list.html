@@ -8,6 +8,15 @@
     
     <!-- Filter Form -->
     <form method="GET" class="form-inline mb-3">
+        <!-- Category Filter -->
+        <select name="category" class="form-control mr-2">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        
+        <!-- Priority Filter -->
         <select name="priority" class="form-control mr-2">
             <option value="">All Priorities</option>
             <option value="H" {% if request.GET.priority == 'H' %}selected{% endif %}>High</option>
@@ -15,8 +24,9 @@
             <option value="L" {% if request.GET.priority == 'L' %}selected{% endif %}>Low</option>
         </select>
         
+        <!-- Status Filter -->
         <select name="status" class="form-control mr-2">
-            <option value="">All Status</option>
+            <option value="">All Statuses</option>
             <option value="P" {% if request.GET.status == 'P' %}selected{% endif %}>Pending</option>
             <option value="IP" {% if request.GET.status == 'IP' %}selected{% endif %}>In Progress</option>
             <option value="C" {% if request.GET.status == 'C' %}selected{% endif %}>Completed</option>
