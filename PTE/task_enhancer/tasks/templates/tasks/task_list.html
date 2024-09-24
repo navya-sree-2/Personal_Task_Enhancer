@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <h2>My Tasks</h2>
     
-    <!-- Filter Form -->
+    <!-- Filter and Search Form -->
     <form method="GET" class="form-inline mb-3">
         <!-- Category Filter -->
         <select name="category" class="form-control mr-2">
@@ -31,7 +31,10 @@
             <option value="IP" {% if request.GET.status == 'IP' %}selected{% endif %}>In Progress</option>
             <option value="C" {% if request.GET.status == 'C' %}selected{% endif %}>Completed</option>
         </select>
-        
+
+        <!-- Search Input -->
+        <input type="text" name="q" class="form-control mr-2" placeholder="Search tasks" value="{{ search_query|default:'' }}">
+
         <button type="submit" class="btn btn-primary">Filter</button>
         <a href="{% url 'task_list' %}" class="btn btn-secondary ml-2">Clear</a>
     </form>

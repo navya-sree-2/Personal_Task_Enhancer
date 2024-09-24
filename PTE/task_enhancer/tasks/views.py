@@ -150,6 +150,7 @@ def task_list(request):
     category_id = request.GET.get('category', None)
     priority = request.GET.get('priority', None)
     status = request.GET.get('status', None)
+    search_query = request.GET.get('q', None)
 
     tasks = Task.objects.filter(user=request.user).order_by('due_date')
 
@@ -159,6 +160,8 @@ def task_list(request):
         tasks = tasks.filter(priority=priority)
     if status:
         tasks = tasks.filter(status=status)
+    if search_query:
+        tasks = tasks.filter(title__icontains=search_query)
 
     # Pagination: 5 tasks per page
     paginator = Paginator(tasks, 5)
@@ -176,7 +179,9 @@ def task_list(request):
     return render(request, 'tasks/task_list.html', {
         'tasks': tasks,
         'categories': categories,
+        'search_query': search_query,
     })
+
 
 
 
