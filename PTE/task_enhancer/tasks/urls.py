@@ -24,8 +24,11 @@ urlpatterns = [
     path('tasks/<int:pk>/', views.task_detail, name='task_detail'),
     path('tasks/<int:pk>/edit/', views.task_update, name='task_update'),
     path('tasks/<int:pk>/delete/', views.task_delete, name='task_delete'),
-
-
+    path('check-overdue-tasks/', views.check_overdue_tasks_view, name='check_overdue_tasks'),
+    path('dashboard/notifications', views.notifications_view, name='notifications'),
+    path('dashboard/notifications/read/', views.mark_notifications_read_view, name='mark_notifications_read'),
+    # path('delete-notification/<int:notification_id>/', views.delete_notification, name='delete_notification'),
+    
 ]
 
 if settings.DEBUG:

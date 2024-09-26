@@ -14,8 +14,11 @@ from django.http import HttpResponse
 from django.contrib import messages
 from .utils import generate_random_string 
 from django.http import JsonResponse 
-from .models import Profile, Task, Category
+from django.utils import timezone
+from .models import Profile, Task, Category, Notification
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from notifications.signals import notify
+
 
 # Create your views here.
 def home(request):  
@@ -36,6 +39,7 @@ def login_view(request):
                     login(request, user) 
                     # Clear CAPTCHA from session after successful login 
                     del request.session['captcha'] 
+                    check_overdue_tasks_view()
                     return redirect('dashboard')  # Redirect to dashboard or any desired page 
                 else: 
                     messages.error(request, 'Invalid username or password.') 
@@ -114,7 +118,7 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'base.html')
 
 @login_required
 def profile_view(request):
@@ -150,7 +154,6 @@ def task_list(request):
     category_id = request.GET.get('category', None)
     priority = request.GET.get('priority', None)
     status = request.GET.get('status', None)
-    search_query = request.GET.get('q', None)
 
     tasks = Task.objects.filter(user=request.user).order_by('due_date')
 
@@ -160,8 +163,6 @@ def task_list(request):
         tasks = tasks.filter(priority=priority)
     if status:
         tasks = tasks.filter(status=status)
-    if search_query:
-        tasks = tasks.filter(title__icontains=search_query)
 
     # Pagination: 5 tasks per page
     paginator = Paginator(tasks, 5)
@@ -179,9 +180,7 @@ def task_list(request):
     return render(request, 'tasks/task_list.html', {
         'tasks': tasks,
         'categories': categories,
-        'search_query': search_query,
     })
-
 
 
 
@@ -226,20 +225,70 @@ def task_delete(request, pk):
         return redirect('task_list')
     return render(request, 'tasks/delete_task.html', {'task': task})
 
-
+@login_required
 def dashboard_view(request):
+    notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('created_at')
+    print(notifications.count())
     user = request.user
     total_tasks = Task.objects.filter(user=user).count()
     pending_tasks = Task.objects.filter(user=user, status='P').count()
     in_progress_tasks = Task.objects.filter(user=user, status='IP').count()
     completed_tasks = Task.objects.filter(user=user, status='C').count()
+    overdue_tasks = Task.objects.filter(user=user, status__in=['P', 'IP'], due_date__lt=timezone.now()).count()
 
     context = {
         'total_tasks': total_tasks,
         'pending_tasks': pending_tasks,
         'in_progress_tasks': in_progress_tasks,
         'completed_tasks': completed_tasks,
+        'overdue_tasks': overdue_tasks,
+        'notifications': notifications,  # Pass the notifications to the template
     }
-    
+
     return render(request, 'dash.html', context)
 
+
+def check_overdue_tasks_view():
+    current_time = timezone.now()
+    overdue_tasks = Task.objects.filter(due_date__lt=current_time, is_completed=False)
+    for task in overdue_tasks:
+
+        notify.send(
+            sender=task.user,  # Sender is the current logged-in user
+            recipient=task.user,  # Recipient is the user to whom the task is assigned
+            verb= f"{task.title}",
+            description=f'Task "{task.title}" is overdue.'  # Description of the notification
+        )
+    return redirect('dashboard')
+
+def delete_notification(request, notification_id):
+    notification = get_object_or_404(Notification, id=notification_id)
+    
+    if request.method == "POST" and notification.recipient == request.user:
+        notification.delete()  # Deletes the notification
+        # You can add a success message if needed
+    
+    return redirect('dashboard')  # Redirect to the notifications page
+
+def delete_notification(request, notification_id):
+    notification = get_object_or_404(Notification, id=notification_id)
+    
+    if request.method == "POST" and notification.recipient == request.user:
+        notification.delete()
+        messages.success(request, "Notification removed successfully!")
+    
+    return redirect('dashboard')
+
+
+
+@login_required
+def mark_notifications_read_view(request):
+    if request.method == 'POST':
+        # Delete all notifications for the logged-in user
+        Notification.objects.filter(user=request.user).delete()
+        return redirect('dashboard')
+
+# views.py
+def notifications_view(request):
+    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'notifications.html', {'notifications': notifications})
