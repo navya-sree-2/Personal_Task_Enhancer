@@ -21,21 +21,20 @@ Git (for version control)
 
 personal-task-enhancer/
 │
-├── tasks/                # Core app for managing tasks and notifications
-│   ├── migrations/       # Database migrations
-│   ├── templates/        # HTML templates for rendering pages
-│   ├── static/           # CSS, JS, images
-│   └── views.py          # Core views for task operations
+├── tasks/
+│   ├── migrations/
+│   ├── templates/
+│   ├── static/
+│   └── views.py
 │
 ├── personal_task_enhancer/
-│   ├── settings.py       # Django project settings
-│   ├── urls.py           # URL routing configuration
-│   └── wsgi.py           # WSGI application
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
 │
-├── db.sqlite3            # SQLite database
-├── manage.py             # Django management script
-├── requirements.txt      # Python dependencies
-└── README.md             # Project documentation (this file)
+├── db.sqlite3
+├── manage.py
+└── README.md
 
 
 📦 Features in Detail
