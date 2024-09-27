@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}About - Personal Task Enhancer{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center mb-4" style="font-weight: 600; color: #007bff;">Personal Task Enhancer</h1>
+            <p class="text-center lead">
+                Welcome to <strong>Personal Task Enhancer</strong> – your all-in-one productivity tool designed to simplify task management, deadlines, and notifications. Developed to enhance productivity, this tool helps you stay organized and on top of your tasks.
+            </p>
+        </div>
+    </div>
+
+    <!-- Logo Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-4 text-center my-5">
+            <img src="{% static 'tasks/images/logo.png' %}" alt="Personal Task Enhancer Logo" class="img-fluid rounded-circle" style="border: 3px solid #007bff; padding: 10px;">
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h2 class="text-center mb-4" style="font-weight: 600;">Key Features</h2>
+            <div class="card-deck">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tasks fa-2x mb-3" style="color: #007bff;"></i>
+                        <h5 class="card-title">Task Management</h5>
+                        <p class="card-text">Create, update, and delete tasks with deadlines and detailed descriptions.</p>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <i class="fas fa-bell fa-2x mb-3" style="color: #007bff;"></i>
+                        <h5 class="card-title">Overdue Task Alerts</h5>
+                        <p class="card-text">Receive real-time notifications when tasks are overdue.</p>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt fa-2x mb-3" style="color: #007bff;"></i>
+                        <h5 class="card-title">Secure User Authentication</h5>
+                        <p class="card-text">Login, signup, and password reset features secured with CAPTCHA integration.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tech Stack Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h2 class="text-center mb-4" style="font-weight: 600;">Technology Stack</h2>
+            <div class="card-deck">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <i class="fab fa-python fa-2x mb-3" style="color: #007bff;"></i>
+                        <h5 class="card-title">Django Framework</h5>
+                        <p class="card-text">Developed using Django, a powerful Python-based web framework.</p>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <i class="fas fa-database fa-2x mb-3" style="color: #007bff;"></i>
+                        <h5 class="card-title">SQLite Database</h5>
+                        <p class="card-text">Efficient database to store user information, tasks, and notifications.</p>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <i class="fas fa-laptop-code fa-2x mb-3" style="color: #007bff;"></i>
+                        <h5 class="card-title">Bootstrap & Font Awesome</h5>
+                        <p class="card-text">Responsive design with Bootstrap and stunning icons from Font Awesome.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center mt-5">
+            <h2 style="font-weight: 600;">Developer Information</h2>
+            <p class="lead">
+                This project is developed by <strong>Navya Sree</strong> to offer users a seamless and efficient way to organize tasks and manage deadlines. Productivity is the core mission of this application, combining simplicity with powerful functionality.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

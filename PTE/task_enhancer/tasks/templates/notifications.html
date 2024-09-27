@@ -8,7 +8,7 @@
 {% if notifications %}
     <ul>
         {% for notification in notifications %}
-            <li>{{ notification.verb }} - {{ notification.created_at }}</li>
+            <li>{{ notification.verb }} - {{ notification.message }}</li>
         {% endfor %}
     </ul>
 

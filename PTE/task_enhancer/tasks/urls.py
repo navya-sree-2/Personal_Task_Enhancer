@@ -18,7 +18,7 @@ urlpatterns = [
     path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name='registration/pass_reset_done.html'), name='password_reset_done'),
     path('password_reset_confirm/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='registration/pass_reset_confirm.html'), name='password_reset_confirm'),
     path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(template_name='registration/pass_reset_complete.html'), name='password_reset_complete'),
-    # path('profile/<username>', views.profile_view, name='profile'),
+    path('about', views.about_view, name='about'),
     path('tasks/', views.task_list, name='task_list'),
     path('tasks/new/', views.task_create, name='task_create'),
     path('tasks/<int:pk>/', views.task_detail, name='task_detail'),
@@ -27,7 +27,7 @@ urlpatterns = [
     path('check-overdue-tasks/', views.check_overdue_tasks_view, name='check_overdue_tasks'),
     path('dashboard/notifications', views.notifications_view, name='notifications'),
     path('dashboard/notifications/read/', views.mark_notifications_read_view, name='mark_notifications_read'),
-    # path('delete-notification/<int:notification_id>/', views.delete_notification, name='delete_notification'),
+    path('check_overdue_tasks_view', views.check_overdue_tasks_view, name='check_overdue_tasks_view'),
     
 ]
 
