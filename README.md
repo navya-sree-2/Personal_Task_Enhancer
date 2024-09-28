@@ -40,8 +40,8 @@ Welcome to the **Personal Task Enhancer**, your ultimate productivity companion!
 
 ### Prerequisites
 
-- Python 3.x
-- Django 3.x+
+- Python 3.9
+- Django 4.2
 - SQLite (built-in with Django)
 - Git (for version control)
 
