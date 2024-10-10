@@ -17,7 +17,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from .models import Profile, Task, Category, Notification
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from notifications.signals import notify
+# from notifications.signals import notify
 
 
 # Create your views here.
